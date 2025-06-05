@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz and Earn</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aviator Style Coin Game</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <div class="sidebar">
-    Vikash Rajpurohit
-  </div>
-
   <div class="container">
-    <h1>Quiz and Earn</h1>
-    <button id="start-btn">Start Quiz</button>
-    <div id="quiz-container" style="display:none;"></div>
-    <div id="result-container" style="display:none;"></div>
+    <h1>Aviator Style Coin Game</h1>
+    <div id="multiplier">1.00x</div>
+    <canvas id="graphCanvas" width="600" height="300"></canvas>
+    <div class="controls">
+      <button id="startBtn">Start Game</button>
+      <button id="cashoutBtn" disabled>Cash Out</button>
+    </div>
+    <div id="status"></div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
