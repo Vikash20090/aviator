@@ -1,121 +1,105 @@
+const startBtn = document.getElementById('startBtn');
+const cashoutBtn = document.getElementById('cashoutBtn');
+const multiplierDisplay = document.getElementById('multiplier');
+const statusDisplay = document.getElementById('status');
+const canvas = document.getElementById('graphCanvas');
+const ctx = canvas.getContext('2d');
 
-const startBtn = document.getElementById('start-btn');
-const quizContainer = document.getElementById('quiz-container');
-const resultContainer = document.getElementById('result-container');
+let animationId;
+let multiplier = 1;
+let running = false;
+let crashed = false;
+let cashout = false;
+let crashPoint = 0;
 
-const questions = [
-  {
-    question: "भारत की राजधानी क्या है? / What is the capital of India?",
-    options: ["मुंबई / Mumbai", "दिल्ली / Delhi", "चेन्नई / Chennai", "कोलकाता / Kolkata"],
-    answer: "दिल्ली / Delhi"
-  },
-  {
-    question: "क्रिकेट में एक टीम में कितने खिलाड़ी होते हैं? / How many players are there in a cricket team?",
-    options: ["9", "10", "11", "12"],
-    answer: "11"
-  },
-  {
-    question: "सूरज कहाँ उगता है? / Where does the sun rise?",
-    options: ["पश्चिम / West", "उत्तर / North", "पूरब / East", "दक्षिण / South"],
-    answer: "पूरब / East"
-  },
-  {
-    question: "सबसे तेज दौड़ने वाला जानवर कौन है? / Which is the fastest animal?",
-    options: ["शेर / Lion", "चीता / Cheetah", "घोड़ा / Horse", "हाथी / Elephant"],
-    answer: "चीता / Cheetah"
-  },
-  {
-    question: "भारत का राष्ट्रीय पक्षी कौन है? / What is the national bird of India?",
-    options: ["तोता / Parrot", "मोर / Peacock", "हंस / Swan", "कौवा / Crow"],
-    answer: "मोर / Peacock"
-  },
-  {
-    question: "2 + 2 कितना होता है? / What is 2 + 2?",
-    options: ["3", "4", "5", "6"],
-    answer: "4"
-  },
-  {
-    question: "ऑक्सीजन गैस किस चीज़ के लिए ज़रूरी है? / Oxygen gas is necessary for?",
-    options: ["जलने के लिए / Burning", "साँस लेने के लिए / Breathing", "खाने के लिए / Eating", "नींद के लिए / Sleeping"],
-    answer: "साँस लेने के लिए / Breathing"
-  },
-  {
-    question: "सबसे बड़ा ग्रह कौन सा है? / What is the biggest planet?",
-    options: ["पृथ्वी / Earth", "मंगल / Mars", "बृहस्पति / Jupiter", "शनि / Saturn"],
-    answer: "बृहस्पति / Jupiter"
-  },
-  {
-    question: "ताज महल कहाँ स्थित है? / Where is Taj Mahal located?",
-    options: ["जयपुर / Jaipur", "आगरा / Agra", "दिल्ली / Delhi", "कोलकाता / Kolkata"],
-    answer: "आगरा / Agra"
-  },
-  {
-    question: "कंप्यूटर का 'ब्रेन' किसे कहते हैं? / What is called the brain of computer?",
-    options: ["CPU", "RAM", "Mouse", "Monitor"],
-    answer: "CPU"
-  }
-];
+const graphPoints = [];
+const maxPoints = 600; // width of canvas in pixels
 
-let currentQuestionIndex = 0;
-let score = 0;
-
-startBtn.addEventListener('click', startQuiz);
-
-function startQuiz() {
-  startBtn.style.display = 'none';
-  quizContainer.style.display = 'block';
-  showQuestion();
+function getRandomCrashPoint() {
+  // Crash point between 1.2x to 10x randomly (you can adjust)
+  return (Math.random() * 8.8 + 1.2).toFixed(2);
 }
 
-function showQuestion() {
-  const currentQ = questions[currentQuestionIndex];
-  quizContainer.innerHTML = `<h2>${currentQ.question}</h2>`;
-  
-  currentQ.options.forEach(option => {
-    const button = document.createElement('button');
-    button.innerText = option;
-    button.classList.add('option-btn');
-    button.addEventListener('click', () => selectAnswer(option, button));
-    quizContainer.appendChild(button);
-  });
+function resetGame() {
+  multiplier = 1;
+  crashed = false;
+  cashout = false;
+  graphPoints.length = 0;
+  statusDisplay.textContent = '';
+  multiplierDisplay.textContent = '1.00x';
+  cashoutBtn.disabled = true;
+  startBtn.disabled = false;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function selectAnswer(selected, btn) {
-  const allButtons = document.querySelectorAll('.option-btn');
-  allButtons.forEach(b => b.disabled = true);
+function drawGraph() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (selected === questions[currentQuestionIndex].answer) {
-    score++;
-    btn.style.backgroundColor = '#28a745'; // green
-  } else {
-    btn.style.backgroundColor = '#dc3545'; // red
-    allButtons.forEach(b => {
-      if (b.innerText === questions[currentQuestionIndex].answer) {
-        b.style.backgroundColor = '#28a745';
-      }
-    });
+  // Draw axis lines
+  ctx.strokeStyle = '#415a77';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(40, 0);
+  ctx.lineTo(40, canvas.height - 30);
+  ctx.lineTo(canvas.width, canvas.height - 30);
+  ctx.stroke();
+
+  // Draw multiplier curve
+  ctx.strokeStyle = '#ffba08';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  for (let i = 0; i < graphPoints.length; i++) {
+    let x = 40 + i;
+    let y = canvas.height - 30 - graphPoints[i] * 20; // scale multiplier for graph height
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
   }
+  ctx.stroke();
+}
 
-  setTimeout(() => {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-      showQuestion();
-    } else {
-      showResult();
+function updateGame() {
+  if (crashed || cashout) {
+    cancelAnimationFrame(animationId);
+    if (crashed) {
+      statusDisplay.textContent = `Crash! You lost. Crash at ${crashPoint}x`;
+      multiplierDisplay.textContent = `${crashPoint}x`;
+    } else if (cashout) {
+      statusDisplay.textContent = `You cashed out at ${multiplier.toFixed(2)}x! Congrats!`;
+      multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
     }
-  }, 1200);
+    startBtn.disabled = false;
+    cashoutBtn.disabled = true;
+    return;
+  }
+
+  multiplier += 0.01 + multiplier * 0.01; // speed up multiplier growth
+
+  if (multiplier >= crashPoint) {
+    crashed = true;
+  } else {
+    graphPoints.push(multiplier);
+    if (graphPoints.length > maxPoints) {
+      graphPoints.shift();
+    }
+    multiplierDisplay.textContent = multiplier.toFixed(2) + 'x';
+    drawGraph();
+    animationId = requestAnimationFrame(updateGame);
+  }
 }
 
-function showResult() {
-  quizContainer.style.display = 'none';
-  resultContainer.style.display = 'block';
-  resultContainer.innerHTML = `<h2>आपका स्कोर है: ${score} / ${questions.length}</h2>
-    <button onclick="restartQuiz()">Restart Quiz</button>`;
-}
+startBtn.addEventListener('click', () => {
+  resetGame();
+  running = true;
+  crashPoint = parseFloat(getRandomCrashPoint());
+  startBtn.disabled = true;
+  cashoutBtn.disabled = false;
+  statusDisplay.textContent = 'Game started! Cash out before crash.';
+  updateGame();
+});
 
-function restartQuiz() {
-  score = 0;
-  currentQuestionIndex = 0;
-  resultContainer.style.display = 'none';
-  startBtn.style.display = 'inline-block';
-}
+cashoutBtn.addEventListener('click', () => {
+  if (!running || crashed || cashout) return;
+  cashout = true;
+  running = false;
+});
