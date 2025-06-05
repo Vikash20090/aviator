@@ -90,3 +90,26 @@ button:hover:not(:disabled) {
   user-select: none;     /* टेक्स्ट सिलेक्ट न हो */
   box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* हल्की छाया */
 }
+
+#sideName {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* खूबसूरत ग्रेडिएंट */
+  color: white;
+  font-size: 26px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(37, 117, 252, 0.4);
+  font-family: 'Poppins', sans-serif;
+  user-select: none;
+  z-index: 10000;
+  letter-spacing: 1.1px;
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+#sideName:hover {
+  transform: scale(1.1);
+}
