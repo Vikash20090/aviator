@@ -1,91 +1,73 @@
 body {
+  background: #0d1b2a;
+  color: #f0f0f0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  margin: 0;
-  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  margin: 0;
 }
 
 .container {
-  background-color: rgba(0, 0, 0, 0.4);
-  padding: 20px 40px;
-  border-radius: 15px;
   text-align: center;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  background: #1b263b;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #415a77;
+  width: 650px;
 }
 
 h1 {
-  margin-bottom: 25px;
-  font-weight: 700;
-  font-size: 2.4em;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  margin-bottom: 15px;
+}
+
+#multiplier {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #ffba08;
+}
+
+#graphCanvas {
+  background: #16213e;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 0 10px #0f3460;
+}
+
+.controls {
+  margin-bottom: 15px;
 }
 
 button {
-  background-color: #6c63ff;
+  background: #0f3460;
   border: none;
-  padding: 15px 25px;
-  font-size: 1.1em;
-  border-radius: 10px;
-  color: white;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 25px;
+  margin: 0 10px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 15px;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(108,99,255,0.5);
+  transition: background 0.3s ease;
 }
 
-button:hover {
-  background-color: #574bcc;
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
 }
 
-.option-btn {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 12px 0;
-  border-radius: 8px;
-  font-size: 1em;
-  background-color: #8b82ff;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  transition: background-color 0.3s ease;
+button:hover:not(:disabled) {
+  background: #ffba08;
+  color: #000;
 }
 
-.option-btn:hover:not(:disabled) {
-  background-color: #6c63ff;
-}
-
-.option-btn:disabled {
-  cursor: default;
-  opacity: 0.7;
-}
-
-#result-container h2 {
-  font-size: 1.8em;
-}
-
-#result-container button {
-  margin-top: 25px;
-}
-
-.sidebar {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 1.2em;
+#status {
+  font-size: 20px;
+  margin-top: 10px;
+  min-height: 24px;
+  color: #ff4757;
   font-weight: 600;
-  background-color: rgba(0,0,0,0.4);
-  padding: 10px 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  user-select: none;
-  color: white;
-  z-index: 1000;
 }
+
