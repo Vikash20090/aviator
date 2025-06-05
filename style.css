@@ -71,3 +71,18 @@ button:hover:not(:disabled) {
   font-weight: 600;
 }
 
+#sideName {
+  position: fixed;       /* स्क्रीन पर फिक्स रहेगा */
+  top: 10px;             /* ऊपर से 10px नीचे */
+  left: 10px;            /* बाईं तरफ से 10px अंदर */
+  font-size: 28px;       /* बड़ा फॉन्ट साइज़ */
+  font-weight: bold;     /* बोल्ड टेक्स्ट */
+  color: #222222;        /* टेक्स्ट का रंग */
+  background-color: rgba(255, 255, 255, 0.7); /* हल्का पारदर्शी बैकग्राउंड */
+  padding: 10px 15px;    /* अंदर की जगह */
+  border-radius: 6px;    /* गोल किनारे */
+  z-index: 9999;         /* ऊपर दिखाने के लिए */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;     /* टेक्स्ट सिलेक्ट न हो */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* हल्की छाया */
+}
