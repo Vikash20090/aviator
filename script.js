@@ -113,3 +113,7 @@ document.getElementById('closeAd').addEventListener('click', function() {
   document.getElementById('adContainer').style.display = 'none';
 });
 
+document.getElementById('startBtn').addEventListener('click', function() {
+  window.open('https://ads-link-yahan.com', '_blank');
+});
+
