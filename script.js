@@ -103,3 +103,13 @@ cashoutBtn.addEventListener('click', () => {
   cashout = true;
   running = false;
 });
+
+document.getElementById('startBtn').addEventListener('click', function() {
+  document.getElementById('adContainer').style.display = 'flex';
+});
+
+// एड बंद करने का बटन
+document.getElementById('closeAd').addEventListener('click', function() {
+  document.getElementById('adContainer').style.display = 'none';
+});
+
